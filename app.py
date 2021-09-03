@@ -113,3 +113,35 @@ def save_comment():
     <ul/>
     """
 
+# Variables in a URL
+@app.route('/r/<subreddit>')
+def show_subreddit(subreddit):
+    # return "this is a subreddit"
+    return f"<h1>browsing {subreddit}</h1>"
+
+
+# data structure
+POSTS = {
+    1: "I like chicken tender",
+    2: "I hate fast food",
+    3: "OMG"
+}
+
+# @app.route('/posts/<id>')  # this variables always return strign, convert to int if needed
+# def find_post(id):
+#     post = POSTS[id]
+#     return f"<p>{post}</p>"
+
+@app.route('/posts/<int:id>')  # this variables always return strign, convert to int if needed
+def find_post(id):
+    # post = POSTS[id]  # this works fine, but for /posts/4 it gives key error, to fix it use .get method
+    post = POSTS.get(id, "Post not found") # if it does not find any post, then it prints post not found
+    return f"<p>{post}</p>"
+
+@app.route("/r/<subreddit>/comments/<post_id>") # 2 variables here
+def show_comments(subreddit, post_id):
+    return f"<h1>Viewing comments for post with id: {post_id} from the {subreddit}</h1>"
+
+# in browser type localhost/r/nk/comments/34  it should work
+
+# query strings start with "?" mark
