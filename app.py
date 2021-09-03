@@ -50,3 +50,51 @@ def searach():
     # return "SEARCH PAGE"
     return f"<h1>The search result for: {term} </h1> <p>sorting by {sort}</p>"
 
+# for post request, use methods = ["POST"]
+@app.route("/post", methods=["POST"])
+def post_demo():
+    return "You made a post request"
+
+@app.route("/post", methods=["GET"])
+def get_demo():
+    return "You made a GET request"
+
+# use form for POST request
+# @app.route("/add-comment")
+# def add_comment_form():
+#     return """
+#     <h1>Add comment </h1>
+#     <form method=POST>
+#         <input type='text' placeholder='comment'/>
+#         <button>Submit</button> 
+#     </form>
+#     """
+
+# To make post request work on form data, use name attribute in form. This attribute(name) is used to store input values that we send to server
+@app.route("/add-comment")
+def add_comment_form():
+    return """
+    <h1>Add comment </h1>
+    <form method="POST">
+        <input type='text' placeholder='comment' name='comment'/>
+        <button>Submit</button> 
+    </form>
+    """
+
+# now add POST route
+# @app.route('/add-comment', methods=["POST"])
+# def save_comment():
+#     return """
+#     <h1>SAVED YOUR COMMENT </h1>
+#     """
+
+# to work with form data, use request object(request.form)
+
+@app.route('/add-comment', methods=["POST"])
+def save_comment():
+    comment = request.form["comment"]
+    return f"""
+    <h1>SAVED YOUR COMMENT WITH TEXT OF {comment}</h1>
+    """
+
+
