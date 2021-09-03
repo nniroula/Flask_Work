@@ -1,5 +1,5 @@
 
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -24,6 +24,7 @@ def hello():
     """
     return html
 
+# root directory
 @app.route("/")
 def home_page():
     html = """
@@ -36,4 +37,16 @@ def home_page():
     </html>
     """
     return html
+
+# query string in search
+# simple dynamic web page
+@app.route('/search')       # in your browser type localhost/search?term=something&sort=something
+def searach():
+    print(request.args)
+    # search for 'term' in browser
+    term = request.args["term"]
+    # you can search for multiple things at a time
+    sort = request.args["sort"]
+    # return "SEARCH PAGE"
+    return f"<h1>The search result for: {term} </h1> <p>sorting by {sort}</p>"
 
