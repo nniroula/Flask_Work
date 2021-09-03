@@ -77,6 +77,7 @@ def add_comment_form():
     <h1>Add comment </h1>
     <form method="POST">
         <input type='text' placeholder='comment' name='comment'/>
+        <input type='text' placeholder='username' name='username'/>
         <button>Submit</button> 
     </form>
     """
@@ -90,11 +91,25 @@ def add_comment_form():
 
 # to work with form data, use request object(request.form)
 
+# @app.route('/add-comment', methods=["POST"])
+# def save_comment():
+#     comment = request.form["comment"]
+#     # username = request.form["username"]
+#     print(request.form) # in terminal it prints: ImmutableMultiDict([('comment', 'ok'), ('username', 'nn')])
+#     return f"""
+#     <h1>SAVED YOUR COMMENT WITH TEXT OF {comment} </h1>
+#     """
+
 @app.route('/add-comment', methods=["POST"])
 def save_comment():
     comment = request.form["comment"]
+    username = request.form["username"]
+    print(request.form) # in terminal it prints: ImmutableMultiDict([('comment', 'ok'), ('username', 'nn')])
     return f"""
-    <h1>SAVED YOUR COMMENT WITH TEXT OF {comment}</h1>
+    <h1>SAVED YOUR COMMENT</h1>
+    <ul>
+        <li>Username: {username}</li>
+        <li>Username: {comment}</li>
+    <ul/>
     """
-
 
