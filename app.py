@@ -1,8 +1,12 @@
 
-from flask import Flask, request
+from flask import Flask, request, render_template
+# from flask.templating import render_template
+from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = "Oh-so-secret" # this relies on app being defined. It has to do with session
+debug = DebugToolbarExtension(app)  # if app variable is named myapp then app should be replaced by myapp
 # @app.route("/")
 # def hello():
 #     return "HELLO"
@@ -12,17 +16,17 @@ def goodbye():
     return "Good Bye"
 
 # now return html content
-@app.route("/hello")
-def hello():
-    html = """
-    <html>
-        <body>
-            <h1> Hello, Flask First App. </h1>
-            <p>This is an html content displayed here.</p>
-        </body>
-    </html>
-    """
-    return html
+# @app.route("/hello")
+# def hello():
+#     html = """
+#     <html>
+#         <body>
+#             <h1> Hello, Flask First App. </h1>
+#             <p>This is an html content displayed here.</p>
+#         </body>
+#     </html>
+#     """
+#     return html
 
 # root directory
 @app.route("/")
@@ -145,3 +149,34 @@ def show_comments(subreddit, post_id):
 # in browser type localhost/r/nk/comments/34  it should work
 
 # query strings start with "?" mark
+
+# JINJA TEMPLATING
+
+from random import randint, choice
+
+@app.route("/hello/<name>")
+def say_hello(name):
+    return render_template("hello.html")
+
+# Template so far is static, make it dyamic
+# Any thing inside 2 sets of curly braces {{}} is run as python
+
+@app.route("/lucky")
+def lucky_number():
+    num = randint(1, 10)
+    return render_template("lucky.html", lucky_num = num, msg = "you are lucky")
+
+# greeter demo that is greeter route
+@app.route('/form')
+def show_form():
+    return render_template("form.html")
+
+# To make a random compliments
+COMPLIMENTS = ["cool", "Pythonic", "impressive", "C++ ish"]
+# pick one element randomly, import choice
+
+@app.route('/greet')
+def get_greeting():
+    username = request.args["username"]
+    nice_thing = choice(COMPLIMENTS)
+    return render_template("greet.html", username = username, nice = nice_thing)
