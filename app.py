@@ -197,3 +197,10 @@ def get_greeting_2():
     wants = request.args.get("wants_compliments")
     nice_things = sample(COMPLIMENTS, 3) # sample is a function in random module and selects 3 random items here
     return render_template("greet_2.html", username = username, wants_compliments=wants, compliments=nice_things)
+
+# template inheritance
+# parent template is parent.html, child template is child.html
+
+@app.route("/inheritance")
+def template_inheritance():
+    return render_template("child.html")
