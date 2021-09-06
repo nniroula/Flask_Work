@@ -152,7 +152,7 @@ def show_comments(subreddit, post_id):
 
 # JINJA TEMPLATING
 
-from random import randint, choice
+from random import randint, choice, sample
 
 @app.route("/hello/<name>")
 def say_hello(name):
@@ -180,3 +180,20 @@ def get_greeting():
     username = request.args["username"]
     nice_thing = choice(COMPLIMENTS)
     return render_template("greet.html", username = username, nice = nice_thing)
+
+@app.route("/spell/<word>")
+def spell_word(word):
+    return render_template("spell_word.html", word = word.upper())
+
+@app.route("/form-2")
+def show_form_2():
+    return render_template("form_2.html")
+
+@app.route("/greet-2")
+def get_greeting_2():
+    # If we do not want compliments, this gives error when a form is rendered
+    username = request.args["username"]
+    # wants_compliments = request.args["wants_compliments"]
+    wants = request.args.get("wants_compliments")
+    nice_things = sample(COMPLIMENTS, 3) # sample is a function in random module and selects 3 random items here
+    return render_template("greet_2.html", username = username, wants_compliments=wants, compliments=nice_things)
