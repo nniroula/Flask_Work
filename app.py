@@ -1,5 +1,5 @@
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 # from flask.templating import render_template
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -204,3 +204,34 @@ def get_greeting_2():
 @app.route("/inheritance")
 def template_inheritance():
     return render_template("child.html")
+
+# flask redirect
+# make a new route and redirect it to  an old route already existing
+
+# set DEBUG_TB_INTERCEPT_REDIRECTS to False and see what happens with redirect-it directly takes to the redirected page
+
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False 
+
+@app.route('/old-home-page')
+def redirect_to_home():
+    """ redirects to new home page """
+    return redirect('/')
+
+# make a list of movies
+MOVIES = ["Amadeus", "Chicken run", "Dances with wolves"]
+
+@app.route("/movies")
+def show_all_movies():
+    """ show list of all movies in fake db MOVIES """
+    return render_template('movies.html', movies = MOVIES)
+
+@app.route("/movies/new", methods=["POST"])  # methods=["POST"] to listen to post request comming in
+def add_movie():
+    title = request.form['title']    # 'title' is a value for name attribute in html file
+    # add to data base
+    MOVIES.append(title)
+    # return render_template('movies.html', movies = MOVIES)
+    # instead of the going back to the same page, redirect to the different page that shows list of movie. If you refresh the same page, the last item keeps getting added-so avoid it by redirecting to a different page
+    return redirect("/movies") 
+
+# n3xt example for redirect
