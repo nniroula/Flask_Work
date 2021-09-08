@@ -235,3 +235,20 @@ def add_movie():
     return redirect("/movies") 
 
 # n3xt example for redirect
+
+# fake database is Students
+Students = ['Nabin', 'Prinsha', 'Prabah', 'Pabitra']
+
+@app.route("/names")
+def show_names():
+    return render_template("name.html", names = Students)
+
+# now add a new studen to the list or database, to do this use form
+
+@app.route("/new/student", methods = ["POST"])
+def add_student_to_db():
+    new_std = request.form['student-name']
+    Students.append(new_std)
+    # return redirect('/names')
+    return "Congratulations! You are added. "
+
