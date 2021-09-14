@@ -1,5 +1,6 @@
 
 from flask import Flask, request, render_template, redirect
+from flask.helpers import make_response
 # from flask.templating import render_template
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -234,7 +235,28 @@ def add_movie():
     # instead of the going back to the same page, redirect to the different page that shows list of movie. If you refresh the same page, the last item keeps getting added-so avoid it by redirecting to a different page
     return redirect("/movies") 
 
-# n3xt example for redirect
+# next example for redirect
+
+# # fake database is Students
+# Students = ['Nabin', 'Prinsha', 'Prabah', 'Pabitra']
+
+# @app.route("/names")
+# def show_names():
+#     return render_template("name.html", names = Students)
+
+# # now add a new studen to the list or database, to do this use form
+
+# @app.route("/new/student", methods = ["POST"])
+# def add_student_to_db():
+#     new_std = request.form['student-name']
+#     Students.append(new_std)
+#     # return redirect('/names')
+#     return "Congratulations! You are added. "
+
+# flash messaging
+from flask import flash
+
+# in the above example, we will add mesage flashing. It is added in html file
 
 # fake database is Students
 Students = ['Nabin', 'Prinsha', 'Prabah', 'Pabitra']
@@ -249,6 +271,57 @@ def show_names():
 def add_student_to_db():
     new_std = request.form['student-name']
     Students.append(new_std)
-    # return redirect('/names')
-    return "Congratulations! You are added. "
+   
+    flash("added a student")
+    
+    # return "Congratulations! You are added. "
+    return redirect('/names')
 
+# Flask session
+from flask import session # and make a secret key, and treat like a dictionary
+
+@app.route('/demo')
+def res_demo():
+    #return "<h1>Hello</h1>"
+    # Once you make session cookies, you can comment them because they are there until you delet them
+    # session['username'] = 'Nk'
+    # session['ok'] = ['leader', 'nabin', 'learner']
+    # set to a variable
+    content = "<h1>Hello</h1>"
+    # to make session cookie human readable
+    print("**************************")
+    print(session['username'])
+    # make_response is a built-in flask function. it makes response objects.
+    res = make_response(content)
+    # return res
+    return render_template("name.html")
+
+# for flask session
+@app.route("/session")
+def get_session_info():
+    # session['name'] = "Nabin"
+    print("********************")
+    print(['name'])
+    return render_template('name.html')
+
+@app.route("/login-form")
+def show_login():
+    return render_template("login_form.html")
+
+@app.route("/login")
+def verify_passcode():
+    SECRET = 'chicken'
+    entered_code = request.args['secretecode']
+    if entered_code == SECRET:
+        session["entered_pin"] = True
+        return redirect("/secrete-invite")
+    # esle:
+    return redirect("/login-form")
+
+@app.route("/party")
+def show_party():
+    # secrete message all have to get to enter party
+    if session.get('entered_pin', False): # if not found return false
+        return render_template("invite.html")
+    else:
+        return redirect("/login")
